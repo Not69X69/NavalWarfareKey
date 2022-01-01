@@ -1,0 +1,397 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+    local Window = Library.CreateLib("ArkGui | Naval Warfare","BloodTheme")  
+ local Main = Window:NewTab("Main")
+    local MainSection = Main:NewSection("Main")
+MainSection:NewSlider("WalkSpeed", "Adjusts your players walkspeed!", 250, 16, function(v)
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v
+        end)
+     MainSection:NewSlider("JumpPower", "Adjusts your players jumppower!", 250, 50, function(v)
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
+        end)
+	  MainSection:NewSlider("HipHeight", "Adjusts your players hip height!", 250, 0, function(v)
+            game.Players.LocalPlayer.Character.Humanoid.HipHeight = v
+        end)
+
+	  MainSection:NewButton("Reset HipHeight", "Resets your players hip height!", function(v)
+            game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0
+         end)
+    MainSection:NewSlider("FOV", "Adjusts your players FOV!", 150, 0, function(v)
+           game.Workspace.Camera.FieldOfView = (v)
+        end)
+MainSection:NewTextBox("Specate Player", "Type in a player's username to spectate them!", function(v)
+      workspace.CurrentCamera.CameraSubject = game.Players[v].Character.Humanoid
+        end)
+
+        MainSection:NewButton("Unspectate", "Stop spectating the player you were spectating.", function()
+            workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid 
+        end)
+
+     
+       MainSection:NewToggle("Noclip", "Allows you too clip through surfaces!", function(state)
+            getgenv().clip = state
+            game:GetService("RunService").Stepped:Connect(function()
+                if getgenv().clip then
+                 game.Players.LocalPlayer.Character.Head.CanCollide = false
+game.Players.LocalPlayer.Character.Torso.CanCollide = false
+game.Players.LocalPlayer.Character["Left Leg"].CanCollide = false
+game.Players.LocalPlayer.Character["Right Leg"].CanCollide = false
+                end
+            end)
+        end)
+
+        MainSection:NewToggle("Fly", "Fly around the map!", function(state)
+            if state then
+                flytoggled = true
+                Fly = true
+                local mouse=game.Players.LocalPlayer:GetMouse''
+                localplayer=game.Players.LocalPlayer
+                game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+                local torso = game.Players.LocalPlayer.Character.HumanoidRootPart
+                local speed = 3
+                local keys  = {a=false,d=false,w=false,s=false} 
+                local e1
+                local e2
+                local function start()
+                 local pos = Instance.new("BodyPosition",torso)
+                 local gyro = Instance.new("BodyGyro",torso)
+                 pos.Name="EPIXPOS"
+                 pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+                 pos.position = torso.Position
+                 gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+                 gyro.cframe = torso.CFrame
+                 repeat
+                  wait()
+                  localplayer.Character.Humanoid.PlatformStand=true
+                  local new=gyro.cframe - gyro.cframe.p + pos.position
+                  if not keys.w and not keys.s and not keys.a and not keys.d then
+                      speed = 3
+                  end 
+                  if keys.w then 
+                   new   = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+                   speed = speed+0.00
+                  end
+                  if keys.s then 
+                   new   = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+                   speed = speed+0.00
+                  end
+                  if keys.d then 
+                   new   = new * CFrame.new(speed,0,0)
+                   speed = speed+0.00
+                  end
+                  if keys.a then 
+                   new   = new * CFrame.new(-speed,0,0)
+                   speed = speed+0.00
+                  end
+               if speed>3 then
+                   speed = 3
+                  end
+                  pos.position=new.p
+                  if keys.w then
+                   gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*15),0,0)
+                  elseif keys.s then
+                   gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*15),0,0)
+                  else
+                   gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+                  end
+                 until not Fly
+                 if gyro then gyro:Destroy() end
+                 if pos then pos:Destroy() end
+                 flying                                       = false
+                 localplayer.Character.Humanoid.PlatformStand = false
+                 speed                                        = 5
+                end
+                e1=mouse.KeyDown:connect(function(key)
+                 if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+                 if key=="w" then
+                  keys.w=true
+                 elseif key=="s" then
+                  keys.s=true
+                 elseif key=="a" then
+                  keys.a=true
+                 elseif key=="d" then
+                  keys.d=true
+                 end
+                end)
+                e2=mouse.KeyUp:connect(function(key)
+                 if key=="w" then
+                  keys.w=false
+                 elseif key=="s" then
+                  keys.s=false
+                 elseif key=="a" then
+                  keys.a=false
+                 elseif key=="d" then
+                  keys.d=false
+                 end
+                end)
+                start()
+              
+     else
+        flytoggled = false
+        Fly = false
+        local mouse=game.Players.LocalPlayer:GetMouse''
+        localplayer=game.Players.LocalPlayer
+        game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+        local torso = game.Players.LocalPlayer.Character.HumanoidRootPart
+        local speed = 3
+        local keys  = {a=false,d=false,w=false,s=false} 
+        local e1
+        local e2
+        local function start()
+         local pos = Instance.new("BodyPosition",torso)
+         local gyro = Instance.new("BodyGyro",torso)
+         pos.Name="EPIXPOS"
+         pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+         pos.position = torso.Position
+         gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+         gyro.cframe = torso.CFrame
+         repeat
+          wait()
+          localplayer.Character.Humanoid.PlatformStand=true
+          local new=gyro.cframe - gyro.cframe.p + pos.position
+          if not keys.w and not keys.s and not keys.a and not keys.d then
+              speed = 3
+          end 
+          if keys.w then 
+           new   = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+           speed = speed+0.00
+          end
+          if keys.s then 
+           new   = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+           speed = speed+0.00
+          end
+          if keys.d then 
+           new   = new * CFrame.new(speed,0,0)
+           speed = speed+0.00
+          end
+          if keys.a then 
+           new   = new * CFrame.new(-speed,0,0)
+           speed = speed+0.00
+          end
+       if speed>3 then
+           speed = 3
+          end
+          pos.position=new.p
+          if keys.w then
+           gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*15),0,0)
+          elseif keys.s then
+           gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*15),0,0)
+          else
+           gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+          end
+         until not Fly
+         if gyro then gyro:Destroy() end
+         if pos then pos:Destroy() end
+         flying                                       = false
+         localplayer.Character.Humanoid.PlatformStand = false
+         speed                                        = 5
+        end
+        e1=mouse.KeyDown:connect(function(key)
+         if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+         if key=="w" then
+          keys.w=true
+         elseif key=="s" then
+          keys.s=true
+         elseif key=="a" then
+          keys.a=true
+         elseif key=="d" then
+          keys.d=true
+         end
+        end)
+        e2=mouse.KeyUp:connect(function(key)
+         if key=="w" then
+          keys.w=false
+         elseif key=="s" then
+          keys.s=false
+         elseif key=="a" then
+          keys.a=false
+         elseif key=="d" then
+          keys.d=false
+         end
+        end)
+        start()
+            end
+    end)
+	
+	MainSection:NewToggle("Infinite Jump", "Jump infinitly!", function(state)
+    if state then
+        getgenv().infjump = true
+    else
+        getgenv().infjump = false
+    end
+end)
+ game:GetService("UserInputService").JumpRequest:Connect(function()
+        if getgenv().infjump == true then
+            game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+        end
+ end)
+MainSection:NewButton("Claim team Carrier", "Doesn't work if it's occupied", function()
+    for i, v in pairs(game.Workspace:GetChildren()) do
+        if v:FindFirstChild("Owner") then
+            if v.Owner.Value == "" and v.Name == "Carrier" and v.Team.Value == game.Players.LocalPlayer.Team.Name then
+                firetouchinterest(v.Seat, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+                firetouchinterest(v.Seat, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+            end
+        end
+    end
+end)
+MainSection:NewButton("Claim team Battleship", "Doesn't work if it's occupied", function()
+    for i, v in pairs(game.Workspace:GetChildren()) do
+        if v:FindFirstChild("Owner") then
+            if v.Owner.Value == "" and v.Name == "Battleship" and v.Team.Value == game.Players.LocalPlayer.Team.Name then
+                firetouchinterest(v.Seat, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+                firetouchinterest(v.Seat, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+            end
+        end
+    end
+end)
+
+-- Option Tab
+local TabOptions = Window:NewTab("Options")
+local SectionOptions = TabOptions:NewSection("GameOptions")
+
+SectionOptions:NewToggle("Capture island A", "Captures the mentioned island", function(state)
+    getgenv().ToggleCaptureA = state
+    while wait() do
+        if getgenv().ToggleCaptureA == true then
+            for i, v in pairs(game.Workspace:GetChildren()) do
+                if v.Name == "Island" and v.IslandCode.Value == "A" then
+                    while true do
+                        firetouchinterest(v.Flag.FlagPad, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+                        firetouchinterest(v.Flag.FlagPad, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+                        wait()
+                    end
+                end
+            end
+        end
+    end
+end)
+
+SectionOptions:NewToggle("Capture island B", "Captures the mentioned island", function(state)
+    getgenv().ToggleCaptureB = state
+    while wait() do
+        if getgenv().ToggleCaptureB == true then
+            for i, v in pairs(game.Workspace:GetChildren()) do
+                if v.Name == "Island" and v.IslandCode.Value == "B" then
+                    while true do
+                        firetouchinterest(v.Flag.FlagPad, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+                        firetouchinterest(v.Flag.FlagPad, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+                        wait()
+                    end
+                end
+            end
+        end
+    end
+end)
+SectionOptions:NewToggle("Capture island C", "Captures the mentioned island", function(state)
+    getgenv().ToggleCaptureC = state
+    while wait() do
+        if getgenv().ToggleCaptureC == true then
+            for i, v in pairs(game.Workspace:GetChildren()) do
+                if v.Name == "Island" and v.IslandCode.Value == "C" then
+                    while true do
+                        firetouchinterest(v.Flag.FlagPad, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+                        firetouchinterest(v.Flag.FlagPad, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+                        wait()
+                    end
+                end
+            end
+        end
+    end
+end)
+
+SectionOptions:NewTextBox("Kill player:", "Input the exact username", function(TargetPlayer)
+    local OldPos = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position
+    if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("M1 Garand") then
+        game:GetService("Players").LocalPlayer.Backpack["M1 Garand"].Parent = game:GetService("Players").LocalPlayer.Character
+    end
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players[TargetPlayer].Character.HumanoidRootPart.CFrame
+    wait(0.1)
+    game:GetService("ReplicatedStorage").Event:FireServer("shootRifle", "", {game.Players[TargetPlayer].Character.Head})
+    game:GetService("ReplicatedStorage").Event:FireServer("shootRifle", "hit", {game.Players[TargetPlayer].Character.Humanoid})
+    game:GetService("ReplicatedStorage").Event:FireServer("shootRifle", "hit", {game.Players[TargetPlayer].Character.Humanoid})
+    game:GetService("ReplicatedStorage").Event:FireServer("shootRifle", "hit", {game.Players[TargetPlayer].Character.Humanoid})
+    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(OldPos)
+end)
+
+SectionOptions:NewToggle("Kill aura", "Kills everyone in a close radius", function(state)
+    getgenv().ToggleAura = state
+    while wait() do
+        if getgenv().ToggleAura == true then
+                wait(0.3) -- don't change this
+                if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("M1 Garand") then
+                    game:GetService("Players").LocalPlayer.Backpack["M1 Garand"].Parent = game:GetService("Players").LocalPlayer.Character
+                end
+                -- finding the characters
+                for i, v in pairs(game.Workspace:GetChildren()) do
+                    if v.Name ~= game.Players.LocalPlayer.Name then
+                        if v:FindFirstChild("Humanoid") then
+        
+                            -- team check
+                            local victimplayers = game.Players:GetPlayerFromCharacter(v)
+                            if victimplayers.TeamColor ~= game.Players.LocalPlayer.TeamColor then
+        
+                                -- killing everyone
+                                local Event = game:GetService("ReplicatedStorage").Event
+                                Event:FireServer(
+                                    "shootRifle",
+                                    "",
+                                    {
+                                        v.Head
+                                    }
+        
+                                )
+                                Event:FireServer(
+                                    "shootRifle",
+                                    "hit",
+                                    {
+                                        v.Humanoid
+        
+                                    }
+        
+                                )
+                            end
+                        end
+                    end
+                end
+            end        
+    end
+end)
+
+
+-- Teleports tab
+local TabTeleports = Window:NewTab("Teleports")
+local SectionTeleports = TabTeleports:NewSection("Teleports")
+
+SectionTeleports:NewButton("Teleport to A", "Teleports you to island A", function()
+    for i, v in pairs(game.Workspace:GetChildren()) do
+        if v.Name == "Island" and v.IslandCode.Value == "A" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Body.Airways.CFrame
+        end
+    end
+end)
+
+SectionTeleports:NewButton("Teleport to B", "Teleports you to island B", function()
+    for i, v in pairs(game.Workspace:GetChildren()) do
+        if v.Name == "Island" and v.IslandCode.Value == "B" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Body.Airways.CFrame
+        end
+    end
+end)
+
+SectionTeleports:NewButton("Teleport to C", "Teleports you to island C", function()
+    for i, v in pairs(game.Workspace:GetChildren()) do
+        if v.Name == "Island" and v.IslandCode.Value == "C" then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Body.Airways.CFrame
+        end
+    end
+end)
+
+-- Credits tab
+local TabCredits = Window:NewTab("Credits")
+local SectionCredits = TabCredits:NewSection("Made By ArkTeam")
+SectionCredits:NewKeybind("Toggle GUI", "Toggles the gui", Enum.KeyCode.RightShift, function()
+	Library:ToggleUI()
+end)
+SectionCredits:NewButton("Copy the Discord invite", "Just click it", function()
+        setclipboard(tostring("https://discord.gg/frtkXJMg9mn"))
+end)
